@@ -41,6 +41,13 @@ export default function DashboardPage() {
   const [showEditor, setShowEditor] = useState(false)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [chartHeights, setChartHeights] = useState([60, 45, 80, 35, 70, 55, 90, 40, 75, 50, 65, 85])
+  const [showAnalyticsEditor, setShowAnalyticsEditor] = useState(false)
+  const [editableAnalytics, setEditableAnalytics] = useState({
+    pageViews: 0,
+    bounceRate: 0,
+    avgSession: 0,
+    conversion: 0,
+  })
 
   const refreshData = () => {
     setIsRefreshing(true)
@@ -51,12 +58,14 @@ export default function DashboardPage() {
         performance: Math.floor(Math.random() * 30) + 70,
         growth: Math.floor(Math.random() * 50) + 10,
       })
-      setAnalytics({
+      const newAnalytics = {
         pageViews: Math.floor(Math.random() * 50000) + 25000,
         bounceRate: Math.floor(Math.random() * 30) + 25, // 25-55%
         avgSession: Math.floor(Math.random() * 180) + 120, // 2-5 minutes in seconds
         conversion: Math.round((Math.random() * 5 + 2) * 100) / 100, // 2-7%
-      })
+      }
+      setAnalytics(newAnalytics)
+      setEditableAnalytics(newAnalytics)
       setIsRefreshing(false)
     }, 1000)
   }
@@ -241,6 +250,254 @@ export default function DashboardPage() {
           </motion.div>
         </div>
 
+        {/* Analytics Overview Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="mb-6 sm:mb-8"
+        >
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-white flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-blue-400" />
+                  Analytics Overview
+                </CardTitle>
+                <Button
+                  onClick={() => setShowAnalyticsEditor(!showAnalyticsEditor)}
+                  className="bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 text-sm"
+                  size="sm"
+                >
+                  Edit Analytics
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                {/* Page Views */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6 }}
+                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
+                >
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                      <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+                    </div>
+                    <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">+15.3%</Badge>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Page Views</p>
+                    <motion.p
+                      className="text-lg sm:text-2xl font-bold text-white truncate"
+                      key={analytics.pageViews}
+                      initial={{ scale: 1.1, color: "#3b82f6" }}
+                      animate={{ scale: 1, color: "#ffffff" }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      {analytics.pageViews.toLocaleString()}
+                    </motion.p>
+                    <p className="text-xs text-gray-500 mt-1">This month</p>
+                  </div>
+                </motion.div>
+
+                {/* Bounce Rate */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.7 }}
+                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
+                >
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-500/20 rounded-full flex items-center justify-center">
+                      <MousePointer className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
+                    </div>
+                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">-2.1%</Badge>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Bounce Rate</p>
+                    <motion.p
+                      className="text-lg sm:text-2xl font-bold text-white truncate"
+                      key={analytics.bounceRate}
+                      initial={{ scale: 1.1, color: "#f97316" }}
+                      animate={{ scale: 1, color: "#ffffff" }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      {analytics.bounceRate}%
+                    </motion.p>
+                    <p className="text-xs text-gray-500 mt-1">Lower is better</p>
+                  </div>
+                </motion.div>
+
+                {/* Average Session */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
+                >
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
+                      <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    </div>
+                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">+8.7%</Badge>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Avg Session</p>
+                    <motion.p
+                      className="text-lg sm:text-2xl font-bold text-white truncate"
+                      key={analytics.avgSession}
+                      initial={{ scale: 1.1, color: "#8b5cf6" }}
+                      animate={{ scale: 1, color: "#ffffff" }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      {formatTime(analytics.avgSession)}
+                    </motion.p>
+                    <p className="text-xs text-gray-500 mt-1">Duration</p>
+                  </div>
+                </motion.div>
+
+                {/* Conversion Rate */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.9 }}
+                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
+                >
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                      <Target className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
+                    </div>
+                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">+12.4%</Badge>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Conversion</p>
+                    <motion.p
+                      className="text-lg sm:text-2xl font-bold text-white truncate"
+                      key={analytics.conversion}
+                      initial={{ scale: 1.1, color: "#10b981" }}
+                      animate={{ scale: 1, color: "#ffffff" }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      {analytics.conversion}%
+                    </motion.p>
+                    <p className="text-xs text-gray-500 mt-1">Success rate</p>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Analytics Editor */}
+              {showAnalyticsEditor && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mt-6 p-4 bg-white/5 rounded-lg border border-white/10"
+                >
+                  <h3 className="text-white font-semibold mb-4">Edit Analytics Data</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {/* Page Views Editor */}
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400 block">Page Views</label>
+                      <input
+                        type="number"
+                        value={editableAnalytics.pageViews}
+                        onChange={(e) => {
+                          const newValue = parseInt(e.target.value) || 0
+                          setEditableAnalytics(prev => ({ ...prev, pageViews: newValue }))
+                          setAnalytics(prev => ({ ...prev, pageViews: newValue }))
+                        }}
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                        placeholder="Enter page views"
+                      />
+                    </div>
+
+                    {/* Bounce Rate Editor */}
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400 block">Bounce Rate (%)</label>
+                      <input
+                        type="number"
+                        value={editableAnalytics.bounceRate}
+                        onChange={(e) => {
+                          const newValue = Math.max(0, Math.min(100, parseInt(e.target.value) || 0))
+                          setEditableAnalytics(prev => ({ ...prev, bounceRate: newValue }))
+                          setAnalytics(prev => ({ ...prev, bounceRate: newValue }))
+                        }}
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                        placeholder="Enter bounce rate"
+                        min="0"
+                        max="100"
+                      />
+                    </div>
+
+                    {/* Average Session Editor */}
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400 block">Avg Session (seconds)</label>
+                      <input
+                        type="number"
+                        value={editableAnalytics.avgSession}
+                        onChange={(e) => {
+                          const newValue = Math.max(0, parseInt(e.target.value) || 0)
+                          setEditableAnalytics(prev => ({ ...prev, avgSession: newValue }))
+                          setAnalytics(prev => ({ ...prev, avgSession: newValue }))
+                        }}
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                        placeholder="Enter session duration"
+                        min="0"
+                      />
+                    </div>
+
+                    {/* Conversion Rate Editor */}
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400 block">Conversion Rate (%)</label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={editableAnalytics.conversion}
+                        onChange={(e) => {
+                          const newValue = Math.max(0, Math.min(100, parseFloat(e.target.value) || 0))
+                          setEditableAnalytics(prev => ({ ...prev, conversion: newValue }))
+                          setAnalytics(prev => ({ ...prev, conversion: newValue }))
+                        }}
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                        placeholder="Enter conversion rate"
+                        min="0"
+                        max="100"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-2 mt-4">
+                    <Button
+                      onClick={() => setShowAnalyticsEditor(false)}
+                      className="bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 text-sm"
+                      size="sm"
+                    >
+                      Done
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        const randomAnalytics = {
+                          pageViews: Math.floor(Math.random() * 50000) + 25000,
+                          bounceRate: Math.floor(Math.random() * 30) + 25,
+                          avgSession: Math.floor(Math.random() * 180) + 120,
+                          conversion: Math.round((Math.random() * 5 + 2) * 100) / 100,
+                        }
+                        setEditableAnalytics(randomAnalytics)
+                        setAnalytics(randomAnalytics)
+                      }}
+                      className="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 text-sm"
+                      size="sm"
+                    >
+                      Randomize
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Charts Section */}
         <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
