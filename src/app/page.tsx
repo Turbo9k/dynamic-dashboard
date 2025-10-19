@@ -381,61 +381,68 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-64 sm:h-80 flex items-end gap-1 sm:gap-2 p-4 sm:p-6 relative">
-                  {visibleChartData.map((data, index) => (
-                    <div key={index} className="flex-1 relative min-w-0 flex flex-col group">
-                      <div className="flex-1 flex items-end relative">
-                        {reducedMotion ? (
-                          <div
-                            className="bg-gradient-to-t from-emerald-500 via-blue-500 to-purple-500 rounded-t-md min-h-[8px] w-full shadow-lg border border-blue-400/30 transition-all duration-300"
-                            style={{ height: `${Math.max(data.value, 8)}%` }}
-                          />
-                        ) : (
-                          <motion.div
-                            className="bg-gradient-to-t from-emerald-500 via-blue-500 to-purple-500 rounded-t-md cursor-pointer relative min-h-[8px] w-full shadow-lg border border-blue-400/30 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-blue-500/25"
-                            initial={{ height: 0 }}
-                            animate={{ height: `${Math.max(data.value, 8)}%` }}
-                            transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
-                            onMouseEnter={() => !isMobile && setHoveredBar(index)}
-                            onMouseLeave={() => !isMobile && setHoveredBar(null)}
-                            whileHover={isMobile ? {} : {
-                              scale: 1.08,
-                              filter: "brightness(1.15)",
-                            }}
-                          />
-                        )}
+                <div className="h-64 sm:h-80 p-4 sm:p-6">
+                  <div className="h-full flex items-end justify-between gap-1 sm:gap-2 relative">
+                    {visibleChartData.map((data, index) => {
+                      const barHeight = Math.max((data.value / 100) * 100, 8) // Convert percentage to actual height
+                      return (
+                        <div key={index} className="flex-1 flex flex-col items-center group relative">
+                          {/* Chart Bar */}
+                          <div className="flex-1 flex items-end w-full relative min-h-[40px]">
+                            {reducedMotion ? (
+                              <div
+                                className="w-full bg-gradient-to-t from-emerald-500 via-blue-500 to-purple-500 rounded-t-lg shadow-lg border border-blue-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25"
+                                style={{ height: `${barHeight}%` }}
+                              />
+                            ) : (
+                              <motion.div
+                                className="w-full bg-gradient-to-t from-emerald-500 via-blue-500 to-purple-500 rounded-t-lg shadow-lg border border-blue-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 cursor-pointer"
+                                initial={{ height: 0 }}
+                                animate={{ height: `${barHeight}%` }}
+                                transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
+                                onMouseEnter={() => !isMobile && setHoveredBar(index)}
+                                onMouseLeave={() => !isMobile && setHoveredBar(null)}
+                                whileHover={isMobile ? {} : {
+                                  scale: 1.05,
+                                  filter: "brightness(1.1)",
+                                }}
+                              />
+                            )}
 
-                        {/* Mobile tap to show data */}
-                        {isMobile && (
-                          <div 
-                            className="absolute inset-0 cursor-pointer z-10"
-                            onClick={() => setHoveredBar(hoveredBar === index ? null : index)}
-                          />
-                        )}
+                            {/* Mobile tap area */}
+                            {isMobile && (
+                              <div 
+                                className="absolute inset-0 cursor-pointer z-10"
+                                onClick={() => setHoveredBar(hoveredBar === index ? null : index)}
+                              />
+                            )}
 
-                        {/* Tooltip */}
-                        {hoveredBar === index && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                            className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 z-20"
-                          >
-                            <div className="bg-slate-900/95 backdrop-blur-md text-white text-xs sm:text-sm rounded-xl px-4 py-3 border border-white/20 shadow-2xl whitespace-nowrap min-w-[120px]">
-                              <div className="font-bold text-blue-400 mb-1">{data.month} 2024</div>
-                              <div className="text-emerald-400 font-semibold text-lg">${data.revenue.toLocaleString()}</div>
-                              <div className="text-gray-300 text-xs mt-1">Revenue</div>
-                              <div className="w-3 h-3 bg-slate-900/95 rotate-45 absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-r border-b border-white/20"></div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </div>
-                      {/* Month labels */}
-                      <div className="text-center text-xs text-gray-400 mt-2 font-medium">
-                        {data.month}
-                      </div>
-                    </div>
-                  ))}
+                            {/* Tooltip */}
+                            {hoveredBar === index && (
+                              <motion.div
+                                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                                className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 z-20"
+                              >
+                                <div className="bg-slate-900/95 backdrop-blur-md text-white text-xs sm:text-sm rounded-xl px-4 py-3 border border-white/20 shadow-2xl whitespace-nowrap min-w-[120px]">
+                                  <div className="font-bold text-blue-400 mb-1">{data.month} 2024</div>
+                                  <div className="text-emerald-400 font-semibold text-lg">${data.revenue.toLocaleString()}</div>
+                                  <div className="text-gray-300 text-xs mt-1">Revenue</div>
+                                  <div className="w-3 h-3 bg-slate-900/95 rotate-45 absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-r border-b border-white/20"></div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </div>
+                          
+                          {/* Month Label */}
+                          <div className="text-center text-xs text-gray-400 mt-2 font-medium">
+                            {data.month}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
                 <div className="text-center text-gray-400 text-xs sm:text-sm mt-3 px-4">
                   {isMobile ? "Tap bars for details" : "Hover over bars for detailed revenue data"}
