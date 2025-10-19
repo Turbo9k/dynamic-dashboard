@@ -382,29 +382,40 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="h-64 sm:h-80 p-4 sm:p-6">
-                  <div className="h-full flex items-end justify-between gap-1 sm:gap-2 relative">
+                  {/* New Revenue Chart */}
+                  <div className="h-full flex items-end justify-between gap-2 relative">
                     {visibleChartData.map((data, index) => {
-                      const barHeight = Math.max((data.value / 100) * 100, 8) // Convert percentage to actual height
+                      const maxValue = Math.max(...visibleChartData.map(d => d.value))
+                      const barHeight = Math.max((data.value / maxValue) * 100, 15) // Ensure minimum 15% height
+                      
                       return (
                         <div key={index} className="flex-1 flex flex-col items-center group relative">
-                          {/* Chart Bar */}
-                          <div className="flex-1 flex items-end w-full relative min-h-[40px]">
+                          {/* Bar Container */}
+                          <div className="flex-1 flex items-end w-full relative" style={{ minHeight: '120px' }}>
+                            {/* Background Bar (for reference) */}
+                            <div className="absolute inset-0 bg-gray-700/20 rounded-t-sm"></div>
+                            
+                            {/* Actual Bar */}
                             {reducedMotion ? (
                               <div
-                                className="w-full bg-gradient-to-t from-emerald-500 via-blue-500 to-purple-500 rounded-t-lg shadow-lg border border-blue-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25"
+                                className="relative w-full bg-gradient-to-t from-cyan-500 via-blue-500 to-indigo-500 rounded-t-lg shadow-lg border border-blue-400/40 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30"
                                 style={{ height: `${barHeight}%` }}
                               />
                             ) : (
                               <motion.div
-                                className="w-full bg-gradient-to-t from-emerald-500 via-blue-500 to-purple-500 rounded-t-lg shadow-lg border border-blue-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 cursor-pointer"
-                                initial={{ height: 0 }}
-                                animate={{ height: `${barHeight}%` }}
-                                transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
+                                className="relative w-full bg-gradient-to-t from-cyan-500 via-blue-500 to-indigo-500 rounded-t-lg shadow-lg border border-blue-400/40 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 cursor-pointer"
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: `${barHeight}%`, opacity: 1 }}
+                                transition={{ 
+                                  delay: index * 0.15, 
+                                  duration: 0.8, 
+                                  ease: "easeOut" 
+                                }}
                                 onMouseEnter={() => !isMobile && setHoveredBar(index)}
                                 onMouseLeave={() => !isMobile && setHoveredBar(null)}
                                 whileHover={isMobile ? {} : {
-                                  scale: 1.05,
-                                  filter: "brightness(1.1)",
+                                  scale: 1.08,
+                                  filter: "brightness(1.2)",
                                 }}
                               />
                             )}
@@ -420,23 +431,23 @@ export default function DashboardPage() {
                             {/* Tooltip */}
                             {hoveredBar === index && (
                               <motion.div
-                                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                                initial={{ opacity: 0, y: 15, scale: 0.8 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                                className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 z-20"
+                                exit={{ opacity: 0, y: 15, scale: 0.8 }}
+                                className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 z-20"
                               >
-                                <div className="bg-slate-900/95 backdrop-blur-md text-white text-xs sm:text-sm rounded-xl px-4 py-3 border border-white/20 shadow-2xl whitespace-nowrap min-w-[120px]">
-                                  <div className="font-bold text-blue-400 mb-1">{data.month} 2024</div>
-                                  <div className="text-emerald-400 font-semibold text-lg">${data.revenue.toLocaleString()}</div>
-                                  <div className="text-gray-300 text-xs mt-1">Revenue</div>
-                                  <div className="w-3 h-3 bg-slate-900/95 rotate-45 absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-r border-b border-white/20"></div>
+                                <div className="bg-slate-800/95 backdrop-blur-lg text-white text-sm rounded-2xl px-5 py-4 border border-white/30 shadow-2xl whitespace-nowrap min-w-[140px]">
+                                  <div className="font-bold text-cyan-400 mb-2">{data.month} 2024</div>
+                                  <div className="text-2xl font-bold text-white mb-1">${data.revenue.toLocaleString()}</div>
+                                  <div className="text-gray-300 text-xs">Monthly Revenue</div>
+                                  <div className="w-4 h-4 bg-slate-800/95 rotate-45 absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-r border-b border-white/30"></div>
                                 </div>
                               </motion.div>
                             )}
                           </div>
                           
                           {/* Month Label */}
-                          <div className="text-center text-xs text-gray-400 mt-2 font-medium">
+                          <div className="text-center text-xs text-gray-300 mt-3 font-semibold">
                             {data.month}
                           </div>
                         </div>
@@ -444,7 +455,7 @@ export default function DashboardPage() {
                     })}
                   </div>
                 </div>
-                <div className="text-center text-gray-400 text-xs sm:text-sm mt-3 px-4">
+                <div className="text-center text-gray-400 text-xs sm:text-sm mt-4 px-4">
                   {isMobile ? "Tap bars for details" : "Hover over bars for detailed revenue data"}
                 </div>
               </CardContent>
