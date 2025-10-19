@@ -38,6 +38,9 @@ export default function DashboardPage() {
   const [hoveredBar, setHoveredBar] = useState<number | null>(null)
   const [reducedMotion, setReducedMotion] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [showEditor, setShowEditor] = useState(false)
+  const [editingIndex, setEditingIndex] = useState<number | null>(null)
+  const [chartHeights, setChartHeights] = useState([60, 45, 80, 35, 70, 55, 90, 40, 75, 50, 65, 85])
 
   const refreshData = () => {
     setIsRefreshing(true)
@@ -238,156 +241,32 @@ export default function DashboardPage() {
           </motion.div>
         </div>
 
-        {/* Analytics Overview Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mb-8"
-        >
-          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-blue-400" />
-                Analytics Overview
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                {/* Page Views */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 }}
-                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
-                >
-                  <div className="flex items-center justify-between mb-2 sm:mb-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
-                      <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
-                    </div>
-                    <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">+15.3%</Badge>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Page Views</p>
-                    <motion.p
-                      className="text-lg sm:text-2xl font-bold text-white truncate"
-                      key={analytics.pageViews}
-                      initial={{ scale: 1.1, color: "#3b82f6" }}
-                      animate={{ scale: 1, color: "#ffffff" }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {analytics.pageViews.toLocaleString()}
-                    </motion.p>
-                    <p className="text-xs text-gray-500 mt-1">This month</p>
-                  </div>
-                </motion.div>
-
-                {/* Bounce Rate */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7 }}
-                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
-                >
-                  <div className="flex items-center justify-between mb-2 sm:mb-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-500/20 rounded-full flex items-center justify-center">
-                      <MousePointer className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
-                    </div>
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">-2.1%</Badge>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Bounce Rate</p>
-                    <motion.p
-                      className="text-lg sm:text-2xl font-bold text-white truncate"
-                      key={analytics.bounceRate}
-                      initial={{ scale: 1.1, color: "#f97316" }}
-                      animate={{ scale: 1, color: "#ffffff" }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {analytics.bounceRate}%
-                    </motion.p>
-                    <p className="text-xs text-gray-500 mt-1">Lower is better</p>
-                  </div>
-                </motion.div>
-
-                {/* Average Session */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.8 }}
-                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
-                >
-                  <div className="flex items-center justify-between mb-2 sm:mb-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
-                      <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
-                    </div>
-                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">+8.7%</Badge>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Avg Session</p>
-                    <motion.p
-                      className="text-lg sm:text-2xl font-bold text-white truncate"
-                      key={analytics.avgSession}
-                      initial={{ scale: 1.1, color: "#8b5cf6" }}
-                      animate={{ scale: 1, color: "#ffffff" }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {formatTime(analytics.avgSession)}
-                    </motion.p>
-                    <p className="text-xs text-gray-500 mt-1">Duration</p>
-                  </div>
-                </motion.div>
-
-                {/* Conversion Rate */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.9 }}
-                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
-                >
-                  <div className="flex items-center justify-between mb-2 sm:mb-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-500/20 rounded-full flex items-center justify-center">
-                      <Target className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
-                    </div>
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">+12.4%</Badge>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Conversion</p>
-                    <motion.p
-                      className="text-lg sm:text-2xl font-bold text-white truncate"
-                      key={analytics.conversion}
-                      initial={{ scale: 1.1, color: "#10b981" }}
-                      animate={{ scale: 1, color: "#ffffff" }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {analytics.conversion}%
-                    </motion.p>
-                    <p className="text-xs text-gray-500 mt-1">Success rate</p>
-                  </div>
-                </motion.div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
 
         {/* Charts Section */}
         <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-blue-400" />
-                  Revenue Chart
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-blue-400" />
+                    Revenue Chart
+                  </CardTitle>
+                  <Button
+                    onClick={() => setShowEditor(!showEditor)}
+                    className="bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 text-sm"
+                    size="sm"
+                  >
+                    Edit Data
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="h-64 sm:h-80 p-4 sm:p-6">
                   {/* Simple Working Chart */}
                   <div className="h-full flex items-end justify-between gap-1 relative">
                     {visibleChartData.map((data, index) => {
-                      // Create simple heights based on index for testing
-                      const heights = [60, 45, 80, 35, 70, 55, 90, 40, 75, 50, 65, 85]
-                      const barHeight = heights[index] || 50
+                      const barHeight = chartHeights[index] || 50
                       
                       return (
                         <div key={index} className="flex-1 flex flex-col items-center group relative">
@@ -395,12 +274,12 @@ export default function DashboardPage() {
                           <div className="w-full flex items-end relative" style={{ height: '200px' }}>
                             {reducedMotion ? (
                               <div
-                                className="w-full bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-lg shadow-lg"
+                                className="w-full bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30"
                                 style={{ height: `${barHeight}px` }}
                               />
                             ) : (
                               <motion.div
-                                className="w-full bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-lg shadow-lg cursor-pointer"
+                                className="w-full bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-lg shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30"
                                 initial={{ height: 0 }}
                                 animate={{ height: `${barHeight}px` }}
                                 transition={{ 
@@ -408,10 +287,15 @@ export default function DashboardPage() {
                                   duration: 0.6, 
                                   ease: "easeOut" 
                                 }}
-                                onMouseEnter={() => !isMobile && setHoveredBar(index)}
-                                onMouseLeave={() => !isMobile && setHoveredBar(null)}
-                                whileHover={isMobile ? {} : {
+                                onMouseEnter={() => {
+                                  setHoveredBar(index)
+                                }}
+                                onMouseLeave={() => {
+                                  setHoveredBar(null)
+                                }}
+                                whileHover={{
                                   scale: 1.05,
+                                  filter: "brightness(1.1)",
                                 }}
                               />
                             )}
@@ -427,21 +311,23 @@ export default function DashboardPage() {
                             {/* Tooltip */}
                             {hoveredBar === index && (
                               <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 10 }}
-                                className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-20"
+                                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                                className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 z-20"
                               >
-                                <div className="bg-black/90 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap">
-                                  <div className="font-bold text-blue-400">{data.month}</div>
-                                  <div className="text-green-400">${data.revenue.toLocaleString()}</div>
+                                <div className="bg-slate-800/95 backdrop-blur-lg text-white text-sm rounded-xl px-4 py-3 border border-white/20 shadow-2xl whitespace-nowrap min-w-[120px]">
+                                  <div className="font-bold text-blue-400 mb-1">{data.month} 2024</div>
+                                  <div className="text-2xl font-bold text-white mb-1">${data.revenue.toLocaleString()}</div>
+                                  <div className="text-gray-300 text-xs">Height: {barHeight}px</div>
+                                  <div className="w-3 h-3 bg-slate-800/95 rotate-45 absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-r border-b border-white/20"></div>
                                 </div>
                               </motion.div>
                             )}
                           </div>
                           
                           {/* Month Label */}
-                          <div className="text-center text-xs text-gray-400 mt-2">
+                          <div className="text-center text-xs text-gray-400 mt-2 font-medium">
                             {data.month}
                           </div>
                         </div>
@@ -452,6 +338,53 @@ export default function DashboardPage() {
                 <div className="text-center text-gray-400 text-xs sm:text-sm mt-3 px-4">
                   {isMobile ? "Tap bars for details" : "Hover over bars for detailed revenue data"}
                 </div>
+                
+                {/* Data Editor Dropdown */}
+                {showEditor && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-4 p-4 bg-white/5 rounded-lg border border-white/10"
+                  >
+                    <h3 className="text-white font-semibold mb-3">Edit Chart Data</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                      {visibleChartData.map((data, index) => (
+                        <div key={index} className="space-y-2">
+                          <label className="text-xs text-gray-400 block">{data.month}</label>
+                          <input
+                            type="number"
+                            value={chartHeights[index] || 50}
+                            onChange={(e) => {
+                              const newHeights = [...chartHeights]
+                              newHeights[index] = Math.max(10, Math.min(200, parseInt(e.target.value) || 50))
+                              setChartHeights(newHeights)
+                            }}
+                            className="w-full px-2 py-1 text-xs bg-white/10 border border-white/20 rounded text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                            min="10"
+                            max="200"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex gap-2 mt-4">
+                      <Button
+                        onClick={() => setShowEditor(false)}
+                        className="bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 text-sm"
+                        size="sm"
+                      >
+                        Done
+                      </Button>
+                      <Button
+                        onClick={() => setChartHeights([60, 45, 80, 35, 70, 55, 90, 40, 75, 50, 65, 85])}
+                        className="bg-gray-500/20 hover:bg-gray-500/30 border border-gray-500/30 text-sm"
+                        size="sm"
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
               </CardContent>
             </Card>
           </motion.div>
