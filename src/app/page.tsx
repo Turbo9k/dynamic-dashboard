@@ -385,8 +385,8 @@ export default function DashboardPage() {
                   {/* New Revenue Chart */}
                   <div className="h-full flex items-end justify-between gap-2 relative">
                     {visibleChartData.map((data, index) => {
-                      const maxValue = Math.max(...visibleChartData.map(d => d.value))
-                      const barHeight = Math.max((data.value / maxValue) * 100, 15) // Ensure minimum 15% height
+                      // Data values are already percentages (8-90), use them directly
+                      const barHeight = Math.max(data.value, 20) // Ensure minimum 20% height
                       
                       return (
                         <div key={index} className="flex-1 flex flex-col items-center group relative">
