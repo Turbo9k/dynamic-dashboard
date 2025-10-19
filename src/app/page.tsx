@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
-  ArrowLeft,
   RefreshCw,
   TrendingUp,
   Users,
@@ -19,7 +18,6 @@ import {
   Clock,
   Target,
 } from "lucide-react"
-import Link from "next/link"
 
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState({
@@ -106,40 +104,33 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
       {/* Header */}
       <div className="border-b border-white/10 bg-black/20 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Portfolio
-              </Link>
-            </Button>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Dynamic Dashboard
-            </h1>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Dynamic Dashboard
+          </h1>
           <Button
             onClick={refreshData}
             disabled={isRefreshing}
-            className="bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30"
+            className="bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 text-sm sm:text-base"
+            size="sm"
           >
-            <RefreshCw aria-hidden className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
-            Refresh Data
+            <RefreshCw aria-hidden className={`w-4 h-4 sm:mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
+            <span className="hidden sm:inline">Refresh Data</span>
           </Button>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Main Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-400 text-sm">Total Revenue</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-400 text-xs sm:text-sm">Total Revenue</p>
                     <motion.p
-                      className="text-3xl font-bold text-white"
+                      className="text-2xl sm:text-3xl font-bold text-white truncate"
                       key={metrics.revenue}
                       initial={{ scale: 1.2, color: "#3b82f6" }}
                       animate={{ scale: 1, color: "#ffffff" }}
@@ -147,13 +138,14 @@ export default function DashboardPage() {
                     >
                       ${metrics.revenue.toLocaleString()}
                     </motion.p>
-                    <p className="text-green-400 text-sm flex items-center gap-1">
-                      <TrendingUp className="w-4 h-4" />
-                      +12.5% from last month
+                    <p className="text-green-400 text-xs sm:text-sm flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">+12.5% from last month</span>
+                      <span className="sm:hidden">+12.5%</span>
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center">
-                    <DollarSign aria-hidden className="w-6 h-6 text-green-400" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <DollarSign aria-hidden className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" />
                   </div>
                 </div>
               </CardContent>
@@ -162,12 +154,12 @@ export default function DashboardPage() {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-400 text-sm">Active Users</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-400 text-xs sm:text-sm">Active Users</p>
                     <motion.p
-                      className="text-3xl font-bold text-white"
+                      className="text-2xl sm:text-3xl font-bold text-white truncate"
                       key={metrics.users}
                       initial={{ scale: 1.2, color: "#3b82f6" }}
                       animate={{ scale: 1, color: "#ffffff" }}
@@ -175,13 +167,14 @@ export default function DashboardPage() {
                     >
                       {metrics.users.toLocaleString()}
                     </motion.p>
-                    <p className="text-blue-400 text-sm flex items-center gap-1">
-                      <TrendingUp className="w-4 h-4" />
-                      +8.2% from last week
+                    <p className="text-blue-400 text-xs sm:text-sm flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">+8.2% from last week</span>
+                      <span className="sm:hidden">+8.2%</span>
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
-                    <Users aria-hidden className="w-6 h-6 text-blue-400" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Users aria-hidden className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
                   </div>
                 </div>
               </CardContent>
@@ -190,12 +183,12 @@ export default function DashboardPage() {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-400 text-sm">Performance</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-400 text-xs sm:text-sm">Performance</p>
                     <motion.p
-                      className="text-3xl font-bold text-white"
+                      className="text-2xl sm:text-3xl font-bold text-white truncate"
                       key={metrics.performance}
                       initial={{ scale: 1.2, color: "#3b82f6" }}
                       animate={{ scale: 1, color: "#ffffff" }}
@@ -203,13 +196,13 @@ export default function DashboardPage() {
                     >
                       {metrics.performance}%
                     </motion.p>
-                    <p className="text-purple-400 text-sm flex items-center gap-1">
-                      <Zap className="w-4 h-4" />
+                    <p className="text-purple-400 text-xs sm:text-sm flex items-center gap-1">
+                      <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
                       Excellent
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center">
-                    <Activity aria-hidden className="w-6 h-6 text-purple-400" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Activity aria-hidden className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
                   </div>
                 </div>
               </CardContent>
@@ -218,12 +211,12 @@ export default function DashboardPage() {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-400 text-sm">Growth Rate</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-400 text-xs sm:text-sm">Growth Rate</p>
                     <motion.p
-                      className="text-3xl font-bold text-white"
+                      className="text-2xl sm:text-3xl font-bold text-white truncate"
                       key={metrics.growth}
                       initial={{ scale: 1.2, color: "#3b82f6" }}
                       animate={{ scale: 1, color: "#ffffff" }}
@@ -231,13 +224,13 @@ export default function DashboardPage() {
                     >
                       +{metrics.growth}%
                     </motion.p>
-                    <p className="text-teal-400 text-sm flex items-center gap-1">
-                      <TrendingUp className="w-4 h-4" />
+                    <p className="text-teal-400 text-xs sm:text-sm flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
                       Above target
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-teal-500/20 rounded-full flex items-center justify-center">
-                    <BarChart3 aria-hidden className="w-6 h-6 text-teal-400" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-teal-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <BarChart3 aria-hidden className="w-5 h-5 sm:w-6 sm:h-6 text-teal-400" />
                   </div>
                 </div>
               </CardContent>
@@ -260,24 +253,24 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {/* Page Views */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6 }}
-                  className="bg-white/5 rounded-lg p-4 border border-white/10"
+                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
-                      <Eye className="w-5 h-5 text-blue-400" />
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                      <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
                     </div>
                     <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">+15.3%</Badge>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm mb-1">Page Views</p>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Page Views</p>
                     <motion.p
-                      className="text-2xl font-bold text-white"
+                      className="text-lg sm:text-2xl font-bold text-white truncate"
                       key={analytics.pageViews}
                       initial={{ scale: 1.1, color: "#3b82f6" }}
                       animate={{ scale: 1, color: "#ffffff" }}
@@ -294,18 +287,18 @@ export default function DashboardPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.7 }}
-                  className="bg-white/5 rounded-lg p-4 border border-white/10"
+                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 bg-orange-500/20 rounded-full flex items-center justify-center">
-                      <MousePointer className="w-5 h-5 text-orange-400" />
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-500/20 rounded-full flex items-center justify-center">
+                      <MousePointer className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
                     </div>
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">-2.1%</Badge>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm mb-1">Bounce Rate</p>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Bounce Rate</p>
                     <motion.p
-                      className="text-2xl font-bold text-white"
+                      className="text-lg sm:text-2xl font-bold text-white truncate"
                       key={analytics.bounceRate}
                       initial={{ scale: 1.1, color: "#f97316" }}
                       animate={{ scale: 1, color: "#ffffff" }}
@@ -322,18 +315,18 @@ export default function DashboardPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.8 }}
-                  className="bg-white/5 rounded-lg p-4 border border-white/10"
+                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-purple-400" />
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
+                      <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
                     </div>
                     <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">+8.7%</Badge>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm mb-1">Avg Session</p>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Avg Session</p>
                     <motion.p
-                      className="text-2xl font-bold text-white"
+                      className="text-lg sm:text-2xl font-bold text-white truncate"
                       key={analytics.avgSession}
                       initial={{ scale: 1.1, color: "#8b5cf6" }}
                       animate={{ scale: 1, color: "#ffffff" }}
@@ -350,18 +343,18 @@ export default function DashboardPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.9 }}
-                  className="bg-white/5 rounded-lg p-4 border border-white/10"
+                  className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
-                      <Target className="w-5 h-5 text-green-400" />
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                      <Target className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
                     </div>
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">+12.4%</Badge>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm mb-1">Conversion</p>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-1">Conversion</p>
                     <motion.p
-                      className="text-2xl font-bold text-white"
+                      className="text-lg sm:text-2xl font-bold text-white truncate"
                       key={analytics.conversion}
                       initial={{ scale: 1.1, color: "#10b981" }}
                       animate={{ scale: 1, color: "#ffffff" }}
@@ -378,7 +371,7 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Charts Section */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
               <CardHeader>
@@ -388,34 +381,34 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-80 flex items-end gap-2 p-6 relative">
+                <div className="h-64 sm:h-80 flex items-end gap-1 sm:gap-2 p-4 sm:p-6 relative">
                   {visibleChartData.map((data, index) => (
-                    <div key={index} className="flex-1 relative min-w-0 flex flex-col">
-                      <div className="flex-1 flex items-end">
+                    <div key={index} className="flex-1 relative min-w-0 flex flex-col group">
+                      <div className="flex-1 flex items-end relative">
                         {reducedMotion ? (
                           <div
-                            className="bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-sm min-h-[12px] w-full shadow-lg border border-blue-400/30"
-                            style={{ height: `${Math.max(data.value, 12)}%` }}
+                            className="bg-gradient-to-t from-emerald-500 via-blue-500 to-purple-500 rounded-t-md min-h-[8px] w-full shadow-lg border border-blue-400/30 transition-all duration-300"
+                            style={{ height: `${Math.max(data.value, 8)}%` }}
                           />
                         ) : (
                           <motion.div
-                          className="bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-sm cursor-pointer relative min-h-[12px] w-full shadow-lg border border-blue-400/30"
-                          initial={{ height: 0 }}
-                          animate={{ height: `${Math.max(data.value, 12)}%` }}
-                          transition={{ delay: index * 0.1, duration: 0.5 }}
-                          onMouseEnter={() => !isMobile && setHoveredBar(index)}
-                          onMouseLeave={() => !isMobile && setHoveredBar(null)}
-                          whileHover={isMobile ? {} : {
-                            scale: 1.05,
-                            filter: "brightness(1.2)",
-                          }}
+                            className="bg-gradient-to-t from-emerald-500 via-blue-500 to-purple-500 rounded-t-md cursor-pointer relative min-h-[8px] w-full shadow-lg border border-blue-400/30 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-blue-500/25"
+                            initial={{ height: 0 }}
+                            animate={{ height: `${Math.max(data.value, 8)}%` }}
+                            transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
+                            onMouseEnter={() => !isMobile && setHoveredBar(index)}
+                            onMouseLeave={() => !isMobile && setHoveredBar(null)}
+                            whileHover={isMobile ? {} : {
+                              scale: 1.08,
+                              filter: "brightness(1.15)",
+                            }}
                           />
                         )}
 
                         {/* Mobile tap to show data */}
                         {isMobile && (
                           <div 
-                            className="absolute inset-0 cursor-pointer"
+                            className="absolute inset-0 cursor-pointer z-10"
                             onClick={() => setHoveredBar(hoveredBar === index ? null : index)}
                           />
                         )}
@@ -423,28 +416,29 @@ export default function DashboardPage() {
                         {/* Tooltip */}
                         {hoveredBar === index && (
                           <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-10"
+                            initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                            className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 z-20"
                           >
-                            <div className="bg-black/90 backdrop-blur-sm text-white text-xs rounded-lg px-3 py-2 border border-white/20 shadow-lg whitespace-nowrap">
-                              <div className="font-semibold text-blue-400">{data.month}</div>
-                              <div className="text-green-400">${data.revenue.toLocaleString()}</div>
-                              <div className="w-2 h-2 bg-black/90 rotate-45 absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-r border-b border-white/20"></div>
+                            <div className="bg-slate-900/95 backdrop-blur-md text-white text-xs sm:text-sm rounded-xl px-4 py-3 border border-white/20 shadow-2xl whitespace-nowrap min-w-[120px]">
+                              <div className="font-bold text-blue-400 mb-1">{data.month} 2024</div>
+                              <div className="text-emerald-400 font-semibold text-lg">${data.revenue.toLocaleString()}</div>
+                              <div className="text-gray-300 text-xs mt-1">Revenue</div>
+                              <div className="w-3 h-3 bg-slate-900/95 rotate-45 absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-r border-b border-white/20"></div>
                             </div>
                           </motion.div>
                         )}
                       </div>
                       {/* Month labels */}
-                      <div className="text-center text-xs text-gray-400 mt-2">
+                      <div className="text-center text-xs text-gray-400 mt-2 font-medium">
                         {data.month}
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="text-center text-gray-400 text-sm mt-2">
-                  {isMobile ? "Tap bars to see detailed revenue data" : "Hover over bars to see detailed revenue data"}
+                <div className="text-center text-gray-400 text-xs sm:text-sm mt-3 px-4">
+                  {isMobile ? "Tap bars for details" : "Hover over bars for detailed revenue data"}
                 </div>
               </CardContent>
             </Card>
@@ -460,7 +454,7 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {[
                     { action: "New user registered", time: "2 min ago", type: "user" },
                     { action: "Payment processed", time: "5 min ago", type: "payment" },
@@ -473,7 +467,7 @@ export default function DashboardPage() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.7 + index * 0.1 }}
-                      className="flex items-center gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+                      className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
                     >
                       <div
                         className={`w-2 h-2 rounded-full ${
@@ -505,7 +499,7 @@ export default function DashboardPage() {
               <CardTitle className="text-white">Dashboard Features</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {[
                   {
                     icon: RefreshCw,
@@ -522,10 +516,10 @@ export default function DashboardPage() {
                   { icon: Users, title: "User Analytics", desc: "Monitor user engagement and behavior" },
                   { icon: Zap, title: "Fast Performance", desc: "Optimized for speed and responsiveness" },
                 ].map((feature, index) => (
-                  <div key={index} className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
-                    <feature.icon className="w-8 h-8 text-blue-400 mb-3" />
-                    <h3 className="text-white font-semibold mb-2">{feature.title}</h3>
-                    <p className="text-gray-400 text-sm">{feature.desc}</p>
+                  <div key={index} className="p-3 sm:p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                    <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400 mb-2 sm:mb-3" />
+                    <h3 className="text-white font-semibold mb-1 sm:mb-2 text-sm sm:text-base">{feature.title}</h3>
+                    <p className="text-gray-400 text-xs sm:text-sm">{feature.desc}</p>
                   </div>
                 ))}
               </div>
